@@ -39,19 +39,6 @@ class DanmakuAsyncLayer: CALayer {
     
     private let sentinel = Sentinel()
     
-    override init() {
-        super.init()
-        contentsScale = UIScreen.main.scale
-    }
-    
-    override init(layer: Any) {
-        super.init(layer: layer)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
     deinit {
         sentinel.increase()
     }
@@ -82,7 +69,7 @@ class DanmakuAsyncLayer: CALayer {
                 return value != self.sentinel.getValue()
             }
             let size = bounds.size
-            let scale = contentsScale
+            let scale = UIScreen.main.scale
             let opaque = isOpaque
             let backgroundColor = (opaque && self.backgroundColor != nil) ? self.backgroundColor : nil
             pool.queue.async {
@@ -135,7 +122,7 @@ class DanmakuAsyncLayer: CALayer {
         } else {
             sentinel.increase()
             willDisplay?(self)
-            UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, contentsScale)
+            UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, UIScreen.main.scale)
             guard let context = UIGraphicsGetCurrentContext() else {
                 UIGraphicsEndImageContext()
                 return
